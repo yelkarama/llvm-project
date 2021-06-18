@@ -14,9 +14,6 @@ if (LLDB_ENABLE_CURSES)
   if(LLVM_ENABLE_TERMINFO)
     list(APPEND LLDB_CURSES_LIBS ${TERMINFO_LIB})
   endif()
-  if (LLVM_BUILD_STATIC)
-    list(APPEND LLDB_CURSES_LIBS gpm)
-  endif()
 endif()
 
 add_lldb_library(lldbCore

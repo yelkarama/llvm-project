@@ -154,9 +154,6 @@ endif()
 
 if (LLDB_ENABLE_LIBEDIT)
   list(APPEND LLDB_LIBEDIT_LIBS ${LibEdit_LIBRARIES})
-  if (LLVM_BUILD_STATIC)
-    list(APPEND LLDB_SYSTEM_LIBS gpm)
-  endif()
 endif()
 
 add_lldb_library(lldbHost
