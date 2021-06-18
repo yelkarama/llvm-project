@@ -36,17 +36,6 @@ if(CAN_TARGET_x86_64 AND UNIX AND NOT APPLE AND NOT ANDROID)
     ARCHS ${arch}
     SOURCES ${DD_SOURCES} CFLAGS ${DD_CFLAGS})
 
-  add_compiler_rt_runtime(clang_rt.dyndd
-    SHARED
-    ARCHS ${arch}
-    SOURCES $<TARGET_OBJECTS:RTDD.${arch}>
-            $<TARGET_OBJECTS:RTInterception.${arch}>
-            $<TARGET_OBJECTS:RTSanitizerCommon.${arch}>
-            $<TARGET_OBJECTS:RTSanitizerCommonLibc.${arch}>
-            $<TARGET_OBJECTS:RTSanitizerCommonSymbolizer.${arch}>
-    LINK_FLAGS ${SANITIZER_COMMON_LINK_FLAGS}
-    LINK_LIBS ${DD_LINKLIBS}
-    PARENT_TARGET dd)
 endif()
 
 add_dependencies(compiler-rt dd)
