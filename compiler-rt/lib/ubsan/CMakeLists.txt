@@ -200,58 +200,5 @@ else()
       CFLAGS ${UBSAN_CXXFLAGS}
       PARENT_TARGET ubsan)
 
-    if (COMPILER_RT_HAS_VERSION_SCRIPT)
-      file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/dummy.cpp "")
-      add_compiler_rt_object_libraries(RTUbsan_dynamic_version_script_dummy
-        ARCHS ${UBSAN_SUPPORTED_ARCH}
-        SOURCES ${CMAKE_CURRENT_BINARY_DIR}/dummy.cpp
-        CFLAGS ${UBSAN_CFLAGS})
-
-      foreach(arch ${UBSAN_SUPPORTED_ARCH})
-        add_sanitizer_rt_version_list(clang_rt.ubsan_standalone-dynamic-${arch}
-                                      LIBS clang_rt.ubsan_standalone-${arch}
-                                           clang_rt.ubsan_standalone_cxx-${arch}
-                                      EXTRA ubsan.syms.extra)
-        set(VERSION_SCRIPT_FLAG
-            -Wl,--version-script,${CMAKE_CURRENT_BINARY_DIR}/clang_rt.ubsan_standalone-dynamic-${arch}.vers)
-        # The Solaris 11.4 linker supports a subset of GNU ld version scripts,
-        # but requires a special option to enable it.
-        if (COMPILER_RT_HAS_GNU_VERSION_SCRIPT_COMPAT)
-            list(APPEND VERSION_SCRIPT_FLAG -Wl,-z,gnu-version-script-compat)
-        endif()
-        set_property(SOURCE
-          ${CMAKE_CURRENT_BINARY_DIR}/dummy.cpp
-          APPEND PROPERTY
-          OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/clang_rt.ubsan_standalone-dynamic-${arch}.vers)
-
-        add_compiler_rt_runtime(clang_rt.ubsan_standalone
-          SHARED
-          ARCHS ${arch}
-          OBJECT_LIBS RTSanitizerCommon
-                RTSanitizerCommonLibc
-                RTSanitizerCommonCoverage
-                RTSanitizerCommonSymbolizer
-                RTUbsan
-                RTUbsan_cxx
-                RTUbsan_standalone
-                RTInterception
-                RTUbsan_dynamic_version_script_dummy
-          CFLAGS ${UBSAN_CFLAGS}
-          LINK_FLAGS ${UBSAN_LINK_FLAGS} ${VERSION_SCRIPT_FLAG}
-          LINK_LIBS ${UBSAN_DYNAMIC_LIBS}
-          PARENT_TARGET ubsan)
-      endforeach()
-
-      set(ARCHS_FOR_SYMBOLS ${UBSAN_SUPPORTED_ARCH})
-      list(REMOVE_ITEM ARCHS_FOR_SYMBOLS i386)
-      add_sanitizer_rt_symbols(clang_rt.ubsan_standalone
-        ARCHS ${ARCHS_FOR_SYMBOLS}
-        PARENT_TARGET ubsan
-        EXTRA ubsan.syms.extra)
-      add_sanitizer_rt_symbols(clang_rt.ubsan_standalone_cxx
-        ARCHS ${ARCHS_FOR_SYMBOLS}
-        PARENT_TARGET ubsan
-        EXTRA ubsan.syms.extra)
-    endif()
   endif()
 endif()
