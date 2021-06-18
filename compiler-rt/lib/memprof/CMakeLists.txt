@@ -160,25 +160,6 @@ foreach(arch ${MEMPROF_SUPPORTED_ARCH})
 
   set(MEMPROF_DYNAMIC_WEAK_INTERCEPTION)
 
-  add_compiler_rt_runtime(clang_rt.memprof
-    SHARED
-    ARCHS ${arch}
-    OBJECT_LIBS ${MEMPROF_COMMON_RUNTIME_OBJECT_LIBS}
-            RTMemprof_dynamic
-            # The only purpose of RTMemprof_dynamic_version_script_dummy is to
-            # carry a dependency of the shared runtime on the version script.
-            # Replacing it with a straightforward
-            # add_dependencies(clang_rt.memprof-dynamic-${arch} clang_rt.memprof-dynamic-${arch}-version-list)
-            # generates an order-only dependency in ninja.
-            RTMemprof_dynamic_version_script_dummy
-            ${MEMPROF_DYNAMIC_WEAK_INTERCEPTION}
-    CFLAGS ${MEMPROF_DYNAMIC_CFLAGS}
-    LINK_FLAGS ${MEMPROF_DYNAMIC_LINK_FLAGS}
-              ${VERSION_SCRIPT_FLAG}
-    LINK_LIBS ${MEMPROF_DYNAMIC_LIBS}
-    DEFS ${MEMPROF_DYNAMIC_DEFINITIONS}
-    PARENT_TARGET memprof)
-
   if (SANITIZER_USE_SYMBOLS)
     add_sanitizer_rt_symbols(clang_rt.memprof_cxx
       ARCHS ${arch})
