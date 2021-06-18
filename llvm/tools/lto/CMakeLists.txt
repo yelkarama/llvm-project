@@ -29,9 +29,6 @@ if(CMAKE_SYSTEM_NAME STREQUAL AIX)
     set(LTO_LIBRARY_NAME LTO)
 endif()
 
-add_llvm_library(${LTO_LIBRARY_NAME} ${LTO_LIBRARY_TYPE} INSTALL_WITH_TOOLCHAIN
-    ${SOURCES} DEPENDS intrinsics_gen)
-
 install(FILES ${LLVM_MAIN_INCLUDE_DIR}/llvm-c/lto.h
   DESTINATION include/llvm-c
   COMPONENT LTO)
