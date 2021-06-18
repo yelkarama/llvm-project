@@ -96,7 +96,7 @@ if (UNIX AND ${CMAKE_SYSTEM_NAME} MATCHES "AIX")
     remove_definitions("-D_XOPEN_SOURCE=700")
 endif()
 
-add_clang_library(libclang ${ENABLE_SHARED} ${ENABLE_STATIC} INSTALL_WITH_TOOLCHAIN
+add_clang_library(libclang ${ENABLE_STATIC} INSTALL_WITH_TOOLCHAIN
   OUTPUT_NAME ${output_name}
   ${SOURCES}
 
@@ -119,32 +119,6 @@ if(ENABLE_STATIC)
       target_compile_definitions(${name} PUBLIC CINDEX_NO_EXPORTS)
     endif()
   endforeach()
-endif()
-
-if(ENABLE_SHARED)
-  if(WIN32)
-    set_target_properties(libclang
-      PROPERTIES
-      VERSION ${LIBCLANG_LIBRARY_VERSION}
-      DEFINE_SYMBOL _CINDEX_LIB_)
-  elseif(APPLE)
-    set(LIBCLANG_LINK_FLAGS " -Wl,-compatibility_version -Wl,1")
-    set(LIBCLANG_LINK_FLAGS "${LIBCLANG_LINK_FLAGS} -Wl,-current_version -Wl,${LLVM_VERSION_MAJOR}.${LLVM_VERSION_MINOR}.${LLVM_VERSION_PATCH}")
-
-    set_property(TARGET libclang APPEND_STRING PROPERTY
-                 LINK_FLAGS ${LIBCLANG_LINK_FLAGS})
-  else()
-    set_target_properties(libclang
-      PROPERTIES
-      VERSION ${LIBCLANG_LIBRARY_VERSION}
-      DEFINE_SYMBOL _CINDEX_LIB_)
-    # FIXME: _CINDEX_LIB_ affects dllexport/dllimport on Win32.
-    if(LLVM_ENABLE_MODULES AND NOT WIN32)
-      target_compile_options(libclang PRIVATE
-        "-fmodules-ignore-macro=_CINDEX_LIB_"
-        )
-    endif()
-  endif()
 endif()
 
 if(INTERNAL_INSTALL_PREFIX)
