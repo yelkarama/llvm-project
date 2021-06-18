@@ -163,32 +163,6 @@ function(add_hwasan_runtimes arch use_aliases)
     set(VERSION_SCRIPT_FLAG)
   endif()
 
-
-  add_compiler_rt_runtime(${hwasan_runtime}
-    SHARED
-    ARCHS ${arch}
-    OBJECT_LIBS
-            ${hwasan_object_dyn_lib}
-            RTInterception
-            RTSanitizerCommon
-            RTSanitizerCommonLibc
-            RTSanitizerCommonCoverage
-            RTSanitizerCommonSymbolizer
-            RTUbsan
-            RTUbsan_cxx
-            # The only purpose of RTHWAsan_dynamic_version_script_dummy is to
-            # carry a dependency of the shared runtime on the version script.
-            # Replacing it with a straightforward
-            # add_dependencies(clang_rt.asan-dynamic-${arch} clang_rt.asan-dynamic-${arch}-version-list)
-            # generates an order-only dependency in ninja.
-            RTHwasan_dynamic_version_script_dummy
-    CFLAGS ${hwasan_dyn_flags}
-    LINK_FLAGS ${HWASAN_DYNAMIC_LINK_FLAGS}
-              ${VERSION_SCRIPT_FLAG}
-    LINK_LIBS ${HWASAN_DYNAMIC_LIBS}
-    DEFS ${ASAN_DYNAMIC_DEFINITIONS}
-    PARENT_TARGET hwasan)
-
   if(SANITIZER_USE_SYMBOLS)
     add_sanitizer_rt_symbols(${hwasan_runtime}
       ARCHS ${arch}
