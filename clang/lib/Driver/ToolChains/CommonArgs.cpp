@@ -1453,7 +1453,7 @@ static void AddUnwindLibrary(const ToolChain &TC, const Driver &D,
         // depending on what's available, and depending on the -static flag
         CmdArgs.push_back("-lunwind");
     } else {
-      CmdArgs.push_back("-l:libunwind.so");
+      CmdArgs.push_back("-lunwind");
     }
     break;
   }
