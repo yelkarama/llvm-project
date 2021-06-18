@@ -167,17 +167,6 @@ if(COMPILER_RT_HAS_SCUDO_STANDALONE)
     CFLAGS ${SCUDO_CFLAGS}
     PARENT_TARGET scudo_standalone)
 
-  add_compiler_rt_runtime(clang_rt.scudo_standalone
-    SHARED
-    ARCHS ${SCUDO_STANDALONE_SUPPORTED_ARCH}
-    SOURCES ${SCUDO_SOURCES} ${SCUDO_SOURCES_C_WRAPPERS} ${SCUDO_SOURCES_CXX_WRAPPERS}
-    ADDITIONAL_HEADERS ${SCUDO_HEADERS}
-    CFLAGS ${SCUDO_CFLAGS}
-    OBJECT_LIBS ${SCUDO_OBJECT_LIBS}
-    LINK_FLAGS ${SCUDO_LINK_FLAGS}
-    LINK_LIBS ${SCUDO_LINK_LIBS}
-    PARENT_TARGET scudo_standalone)
-
   add_subdirectory(benchmarks)
   if(COMPILER_RT_INCLUDE_TESTS)
     add_subdirectory(tests)
