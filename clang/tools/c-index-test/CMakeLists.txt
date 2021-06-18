@@ -14,25 +14,16 @@ if(NOT MSVC)
     )
 endif()
 
-if (LLVM_BUILD_STATIC)
-  target_link_libraries(c-index-test
-    PRIVATE
-    libclang_static
-    clangCodeGen
-    clangIndex
-  )
-else()
-  target_link_libraries(c-index-test
-    PRIVATE
-    libclang
-    clangAST
-    clangBasic
-    clangCodeGen
-    clangFrontend
-    clangIndex
-    clangSerialization
-  )
-endif()
+target_link_libraries(c-index-test
+  PRIVATE
+  libclang
+  clangAST
+  clangBasic
+  clangCodeGen
+  clangFrontend
+  clangIndex
+  clangSerialization
+)
 
 set_target_properties(c-index-test
   PROPERTIES
